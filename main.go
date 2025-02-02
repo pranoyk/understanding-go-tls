@@ -23,6 +23,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("error occurred while setting up net connection, error: %v", err)
 	}
+	defer netConn.Close()
+
 	tlsConfig := &tls.Config{
 		ServerName:         host,
 		InsecureSkipVerify: true,
@@ -30,6 +32,7 @@ func main() {
 
 	// setup client side connection and it returns a greeting which is parsed in the next step
 	conn := tls.Client(netConn, tlsConfig)
+	defer conn.Close()
 
 	// read greeting
 	var buf bytes.Buffer
